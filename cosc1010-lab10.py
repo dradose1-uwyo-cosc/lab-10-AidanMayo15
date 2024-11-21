@@ -17,7 +17,37 @@ def get_hash(to_hash):
     """You can use """
     return sha256(to_hash.encode('utf-8')).hexdigest().upper()
 
+from hashlib import sha256
 
+def get_hash(to_hash):
+    """Generate a SHA-256 hash of the given string."""
+    return sha256(to_hash.encode('utf-8')).hexdigest().upper()
+
+def crack_password():
+    # Read the hash to crack
+    try:
+        with open("hash", "r") as hash_file:
+            stored_hash = hash_file.read().strip()
+    except:
+        print("Error: Could not open the 'hash' file.")
+        return
+
+    # Open the password file
+    try:
+        with open("rockyou.txt", "r", encoding="utf-8") as passwords_file:
+            for password in passwords_file:
+                password = password.strip()  # Remove extra spaces or newlines
+                if get_hash(password) == stored_hash:
+                    print(f"Password found: {password}")
+                    return
+    except:
+        print("Error: Could not open the 'rockyou.txt' file.")
+        return
+
+    print("Password not found.")
+
+if __name__ == "__main__":
+    crack_password()
 
 # Files and Exceptions
 
